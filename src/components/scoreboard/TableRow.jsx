@@ -14,16 +14,30 @@ import umsa from "../../assets/university_logos/umsa.png";
 const images = { cecyt13, chapingo, escom, itcg, uam, ug, umsa };
 
 class TableRow extends Component {
+  timeSubmittedToNiceTime(timeSubmitted) {
+    let seconds = timeSubmitted % 60;
+    let minutes = Math.floor(timeSubmitted / 60);
+    let hours = Math.floor(minutes / 60);
+    minutes = minutes % 60;
+    let niceTime = "";
+    if (hours != 0) {
+      niceTime += hours.toString().padStart(2, "0") + ":";
+    }
+    niceTime += minutes.toString().padStart(2, "0") + ":";
+    niceTime += seconds.toString().padStart(2, "0");
+    return niceTime;
+  }
+
   getImageForTeam(url) {
     return images[url] ?? defaultImage;
   }
 
   numberOfTriesOnAcceptedProblem(problemLetter) {
     let team = this.props.team;
-    return problemLetter;
+    // return problemLetter + " - ";
     for (let i = 0; i < this.props.numberOfProblems; i++) {
       if (this.props.problems[i].index === problemLetter) {
-        return team.triesOnProblems[i] + 1 + " - " + team.penaltyOnProblem[i];
+        return problemLetter + " - " + (team.triesOnProblems[i] + 1);
       }
     }
     return problemLetter;
@@ -33,7 +47,7 @@ class TableRow extends Component {
     let team = this.props.team;
     for (let i = 0; i < this.props.numberOfProblems; i++) {
       if (this.props.problems[i].index === problemLetter) {
-        return team.triesOnProblems[i] + " - " + team.penaltyOnProblem[i];
+        return problemLetter + " - " + team.triesOnProblems[i];
       }
     }
     return problemLetter;
@@ -59,7 +73,7 @@ class TableRow extends Component {
             submissionWhenFrozen[j].contestantName === team.name &&
             submissionWhenFrozen[j].problemIndex === problemLetter
           ) {
-            return team.triesOnProblems[i] + 1 + " - " + submissionWhenFrozen[j].timeSubmitted;
+            return team.triesOnProblems[i] + 1 + " - " + this.timeSubmittedToNiceTime(submissionWhenFrozen[j].timeSubmitted);
           }
         }
       }
@@ -244,7 +258,7 @@ class TableRow extends Component {
         {/*ProblemsSolved*/}
         <span className="tableRow-ResolvedProblems">{this.props.team.solved}</span>
         {/*Penalty*/}
-        <span className="tableRow-Penalty">{this.props.team.penalty}</span>
+        <span className="tableRow-Penalty">{this.timeSubmittedToNiceTime(this.props.team.penalty)}</span>
       </div>
     );
   }

@@ -89,7 +89,7 @@ class Scoreboard extends Component {
               if (problemLetter === submission.problemIndex && teams[i].isProblemSolved[j] === 0) {
                 teams[i].isProblemSolved[j] = 1;
                 teams[i].penaltyOnProblem[j] = submission.timeSubmitted;
-                teams[i].penalty += submission.timeSubmitted + teams[i].triesOnProblems[j] * 20;
+                teams[i].penalty += submission.timeSubmitted + teams[i].triesOnProblems[j] * 10 * 60;
                 teams[i].solved++;
                 if (problemHasBeenSolved[j] === 0) {
                   problemHasBeenSolved[j] = 1;
