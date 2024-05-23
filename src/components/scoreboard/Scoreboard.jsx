@@ -474,6 +474,7 @@ class Scoreboard extends Component {
 
   keyDownHandler(e) {
     switch (e.keyCode) {
+      case 34:
       case 78: //(N)ext Submission
         if (this.state.isPressedKeyOn === 0 && this.state.contestantNameToSelect !== null) {
           let idOfNextUserRowHighlighted = this.state.idOfNextUserRowHighlighted;
