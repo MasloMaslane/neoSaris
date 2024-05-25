@@ -255,6 +255,7 @@ class Scoreboard extends Component {
       contestantNameToSelect: null,
       standingHasChangedInLastOperation: false,
       lastPositionInStanding: {},
+      showingContestantImage: false,
     };
   }
 
@@ -412,6 +413,8 @@ class Scoreboard extends Component {
         hasUserFinishedSubmissions: false,
         idOfNextUserRowHighlighted: idOfNextUserRowHighlighted,
       });
+      console.log(this.state.idOfNextUserRowHighlighted);
+      this.bruh(this.state.idOfNextUserRowHighlighted)
       return;
     }
 
@@ -476,10 +479,18 @@ class Scoreboard extends Component {
     switch (e.keyCode) {
       case 34:
       case 78: //(N)ext Submission
+        if (this.state.showingContestantImage) {
+          const img = document.getElementById("contestantImg");
+          img.classList.toggle("disShow");
+          this.state.showingContestantImage = false;
+          return;
+        }
         if (this.state.isPressedKeyOn === 0 && this.state.contestantNameToSelect !== null) {
           let idOfNextUserRowHighlighted = this.state.idOfNextUserRowHighlighted;
           if (this.state.standingHasChangedInLastOperation === false) {
             idOfNextUserRowHighlighted = Math.max(idOfNextUserRowHighlighted - 1, -1);
+            console.log(this.state.idOfNextUserRowHighlighted);
+            this.bruh(this.state.idOfNextUserRowHighlighted)
           }
           this.setState({
             contestantNameToSelect: null,
@@ -544,6 +555,9 @@ class Scoreboard extends Component {
         tabIndex="0"
         onKeyDown={e => this.keyDownHandler(e)}
       >
+        <div id="contestantImg">
+          TEST
+        </div>
         <Header title={this.props.submissionsData.contestMetadata.name} />
         <div className="score-FlipMove" id="score-FlipMove">
           <FlipMove ref="flipMove" staggerDurationBy="10" duration={900}>
@@ -552,6 +566,12 @@ class Scoreboard extends Component {
         </div>
       </div>
     );
+  }
+
+  bruh(id) {
+    const img = document.getElementById("contestantImg");
+    img.classList.toggle("disShow");
+    this.state.showingContestantImage = true;
   }
 }
 

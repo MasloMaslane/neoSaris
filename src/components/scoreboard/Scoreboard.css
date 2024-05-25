@@ -31,3 +31,21 @@
 .scoreboardTableSelectedRowFinished {
   background-color: #255eba;
 }
+
+#contestantImg {
+  position: absolute;
+  font-size: 2rem;
+  color:red;
+  display: none;
+  z-index: 999;
+  width: 100%;
+  height: 100%;
+  background-color: black;
+  display: none;
+  align-items: center;
+  justify-content: center;
+}
+
+.disShow {
+  display:flex !important;
+}
