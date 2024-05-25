@@ -22,6 +22,8 @@ import i10289 from "../../assets/university_logos/10289.jpg";
 import i29035 from "../../assets/university_logos/29035.jpg";
 import i31485 from "../../assets/university_logos/31485.jpg";
 import i436 from "../../assets/university_logos/436.jpg";
+import i47530 from "../../assets/university_logos/47530.jpg";
+
 let images = {
 i7736,
 i348,
@@ -42,6 +44,7 @@ i10289,
 i29035,
 i31485,
 i436,
+i47530,
 };
 
 class TableRow extends Component {

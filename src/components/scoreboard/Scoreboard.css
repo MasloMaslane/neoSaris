@@ -35,7 +35,7 @@
 #contestantImg {
   position: absolute;
   font-size: 2rem;
-  color:red;
+  color:white;
   display: none;
   z-index: 999;
   width: 100%;
@@ -44,6 +44,12 @@
   display: none;
   align-items: center;
   justify-content: center;
+  flex-direction: column;
+}
+
+#contestantImg > img {
+  height: 80vh;
+  /*! padding-bottom: 10vh; */
 }
 
 .disShow {
