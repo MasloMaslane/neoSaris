@@ -3,15 +3,46 @@ import ProblemBox from "./ProblemBox";
 import "./TableRow.css";
 
 import defaultImage from "../../assets/university_logos/default.png";
-import cecyt13 from "../../assets/university_logos/cecyt13.png";
-import chapingo from "../../assets/university_logos/chapingo.png";
-import escom from "../../assets/university_logos/escom.png";
-import itcg from "../../assets/university_logos/itcg.png";
-import uam from "../../assets/university_logos/uam.png";
-import ug from "../../assets/university_logos/ug.png";
-import umsa from "../../assets/university_logos/umsa.png";
-
-const images = { cecyt13, chapingo, escom, itcg, uam, ug, umsa };
+import i7736 from "../../assets/university_logos/7736.jpg";
+import i348 from "../../assets/university_logos/348.jpg";
+import i46003 from "../../assets/university_logos/46003.jpg";
+import i15763 from "../../assets/university_logos/15763.jpg";
+import i6106 from "../../assets/university_logos/6106.jpg";
+import i13884 from "../../assets/university_logos/13884.jpg";
+import i53286 from "../../assets/university_logos/53286.jpg";
+import i9582 from "../../assets/university_logos/9582.jpg";
+import i111545 from "../../assets/university_logos/111545.jpg";
+import i44295 from "../../assets/university_logos/44295.jpg";
+import i15433 from "../../assets/university_logos/15433.jpg";
+import i441 from "../../assets/university_logos/441.jpg";
+import i29344 from "../../assets/university_logos/29344.jpg";
+import i12112 from "../../assets/university_logos/12112.jpg";
+import i11579 from "../../assets/university_logos/11579.jpg";
+import i10289 from "../../assets/university_logos/10289.jpg";
+import i29035 from "../../assets/university_logos/29035.jpg";
+import i31485 from "../../assets/university_logos/31485.jpg";
+import i436 from "../../assets/university_logos/436.jpg";
+let images = {
+i7736,
+i348,
+i46003,
+i15763,
+i6106,
+i13884,
+i53286,
+i9582,
+i111545,
+i44295,
+i15433,
+i441,
+i29344,
+i12112,
+i11579,
+i10289,
+i29035,
+i31485,
+i436,
+};
 
 class TableRow extends Component {
   timeSubmittedToNiceTime(timeSubmitted) {
@@ -29,7 +60,7 @@ class TableRow extends Component {
   }
 
   getImageForTeam(url) {
-    return images[url] ?? defaultImage;
+    return images["i" + url] ?? defaultImage;
   }
 
   numberOfTriesOnAcceptedProblem(problemLetter) {

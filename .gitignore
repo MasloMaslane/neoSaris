@@ -2,3 +2,5 @@
 /node_modules/*
 build/*
 src/logs/logs.json
+images
+src/assets/university_logos
