@@ -414,7 +414,7 @@ class Scoreboard extends Component {
         idOfNextUserRowHighlighted: idOfNextUserRowHighlighted,
       });
       console.log(this.state.idOfNextUserRowHighlighted);
-      this.bruh(this.state.idOfNextUserRowHighlighted)
+      this.bruh(this.teams[this.state.idOfNextUserRowHighlighted]);
       return;
     }
 
@@ -490,7 +490,7 @@ class Scoreboard extends Component {
           if (this.state.standingHasChangedInLastOperation === false) {
             idOfNextUserRowHighlighted = Math.max(idOfNextUserRowHighlighted - 1, -1);
             console.log(this.state.idOfNextUserRowHighlighted);
-            this.bruh(this.state.idOfNextUserRowHighlighted)
+            this.bruh(this.teams[this.state.idOfNextUserRowHighlighted]);
           }
           this.setState({
             contestantNameToSelect: null,
@@ -568,7 +568,7 @@ class Scoreboard extends Component {
     );
   }
 
-  bruh(id) {
+  bruh(user) {
     const img = document.getElementById("contestantImg");
     img.classList.toggle("disShow");
     this.state.showingContestantImage = true;
