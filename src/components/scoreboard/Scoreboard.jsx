@@ -256,6 +256,8 @@ class Scoreboard extends Component {
       standingHasChangedInLastOperation: false,
       lastPositionInStanding: {},
       showingContestantImage: false,
+      playing: false,
+      interval: null,
     };
   }
 
@@ -404,7 +406,7 @@ class Scoreboard extends Component {
       }
 
       clearInterval(intervalPendingSubmission);
-      return;
+      return false;
     }
 
     if (this.state.hasUserFinishedSubmissions === true) {
@@ -415,7 +417,7 @@ class Scoreboard extends Component {
       });
       console.log(this.state.idOfNextUserRowHighlighted);
       this.bruh(this.state.teams[this.state.idOfNextUserRowHighlighted]);
-      return;
+      return true;
     }
 
     this.cleanSubmissions();
@@ -437,6 +439,8 @@ class Scoreboard extends Component {
     } else if (this.state.idOfNextUserRowHighlighted >= 0) {
       this.setState({ hasUserFinishedSubmissions: true });
     }
+
+    return false;
   }
 
   revealUntilTop(topTeams) {
@@ -475,37 +479,61 @@ class Scoreboard extends Component {
     });
   }
 
+  next() {
+    console.log("next");
+    if (this.state.showingContestantImage) {
+      const img = document.getElementById("contestantImg");
+      img.classList.toggle("disShow");
+      this.state.showingContestantImage = false;
+      if (this.state.playing) {
+        clearInterval(this.state.interval);
+        this.state.interval = setInterval(() => this.next(), 1000);
+        console.log("short");
+      }
+      return;
+    }
+    if (this.state.isPressedKeyOn === 0 && this.state.contestantNameToSelect !== null) {
+      let idOfNextUserRowHighlighted = this.state.idOfNextUserRowHighlighted;
+      if (this.state.standingHasChangedInLastOperation === false) {
+        idOfNextUserRowHighlighted = Math.max(idOfNextUserRowHighlighted - 1, -1);
+        console.log(this.state.idOfNextUserRowHighlighted);
+        this.bruh(this.state.teams[this.state.idOfNextUserRowHighlighted]);
+        if (this.state.playing) {
+          clearInterval(this.state.interval);
+          this.state.interval = setInterval(() => this.next(), 3000);
+          console.log("bruh");
+        }
+      }
+      this.setState({
+        contestantNameToSelect: null,
+        standingHasChangedInLastOperation: false,
+        idOfNextUserRowHighlighted: idOfNextUserRowHighlighted,
+      });
+    } else {
+      const bruhed = this.findNextSubmissionToReveal();
+      let isPressedKeyOn = 1 - this.state.isPressedKeyOn;
+      this.setState({
+        isPressedKeyOn: isPressedKeyOn,
+        hasNotBeenScrolled: false,
+      });
+      this.scrollToElementSelected();
+      if (this.state.playing) {
+        clearInterval(this.state.interval);
+        console.log(bruhed);
+        if (bruhed) {
+          this.state.interval = setInterval(() => this.next(), 3000);
+        } else {
+          this.state.interval = setInterval(() => this.next(), 500);
+        }
+      }
+    }
+  }
+
   keyDownHandler(e) {
     switch (e.keyCode) {
       case 34:
       case 78: //(N)ext Submission
-        if (this.state.showingContestantImage) {
-          const img = document.getElementById("contestantImg");
-          img.classList.toggle("disShow");
-          this.state.showingContestantImage = false;
-          return;
-        }
-        if (this.state.isPressedKeyOn === 0 && this.state.contestantNameToSelect !== null) {
-          let idOfNextUserRowHighlighted = this.state.idOfNextUserRowHighlighted;
-          if (this.state.standingHasChangedInLastOperation === false) {
-            idOfNextUserRowHighlighted = Math.max(idOfNextUserRowHighlighted - 1, -1);
-            console.log(this.state.idOfNextUserRowHighlighted);
-            this.bruh(this.state.teams[this.state.idOfNextUserRowHighlighted]);
-          }
-          this.setState({
-            contestantNameToSelect: null,
-            standingHasChangedInLastOperation: false,
-            idOfNextUserRowHighlighted: idOfNextUserRowHighlighted,
-          });
-        } else {
-          this.findNextSubmissionToReveal();
-          let isPressedKeyOn = 1 - this.state.isPressedKeyOn;
-          this.setState({
-            isPressedKeyOn: isPressedKeyOn,
-            hasNotBeenScrolled: false,
-          });
-          this.scrollToElementSelected();
-        }
+        this.next();
         break;
 
       case 70: //(F)ast Submission
@@ -524,6 +552,16 @@ class Scoreboard extends Component {
       case 65: //(A)utomatic Reveal
         //TODO: Implement automatic reveal, every X time reveal next submission
         console.log("(A)utomatic Reveal, not implemented yet");
+        break;
+
+      case 80: // (P)lay/Pause Automatic Reveal
+        let playing = !this.state.playing;
+        if (playing) {
+          this.state.interval = setInterval(() => this.next(), 1000);
+        }
+        console.log("xd", playing);
+        this.setState({ playing: playing });
+        console.log("xdd", this.state.playing);
         break;
 
       default:
@@ -572,7 +610,7 @@ class Scoreboard extends Component {
   bruh(user) {
     const img = document.getElementById("contestantImg");
     img.firstElementChild.src = "/src/assets/university_logos/" + user.id + ".jpg";
-    img.firstElementChild.nextElementSibling.textContent = user.name + ". " + user.name;
+    img.firstElementChild.nextElementSibling.textContent = user.position + ". " + user.name;
       img.classList.toggle("disShow");
       console.log(user.id);
     this.state.showingContestantImage = true;
