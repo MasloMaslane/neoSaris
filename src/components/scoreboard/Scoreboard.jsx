@@ -572,7 +572,7 @@ class Scoreboard extends Component {
   bruh(user) {
     const img = document.getElementById("contestantImg");
     img.firstElementChild.src = "/src/assets/university_logos/" + user.id + ".jpg";
-    img.firstElementChild.nextElementSibling.textContent = user.name;
+    img.firstElementChild.nextElementSibling.textContent = user.name + ". " + user.name;
       img.classList.toggle("disShow");
       console.log(user.id);
     this.state.showingContestantImage = true;
