@@ -257,7 +257,6 @@ class Scoreboard extends Component {
       lastPositionInStanding: {},
       showingContestantImage: false,
       playing: false,
-      interval: null,
     };
   }
 
@@ -360,7 +359,7 @@ class Scoreboard extends Component {
     return submissionToRevealId;
   }
 
-  findNextSubmissionToReveal() {
+  async findNextSubmissionToReveal() {
     if (this.state.currentFrozenSubmission !== null) {
       let idToRemove = this.state.savedCurrentFrozenSubmissionId;
       let submissions = this.state.submissions;
@@ -410,13 +409,13 @@ class Scoreboard extends Component {
     }
 
     if (this.state.hasUserFinishedSubmissions === true) {
+      console.log("1", this.state.idOfNextUserRowHighlighted);
+      await this.bruh(this.state.teams[this.state.idOfNextUserRowHighlighted]);
       let idOfNextUserRowHighlighted = this.state.idOfNextUserRowHighlighted - 1;
       this.setState({
         hasUserFinishedSubmissions: false,
         idOfNextUserRowHighlighted: idOfNextUserRowHighlighted,
       });
-      console.log(this.state.idOfNextUserRowHighlighted);
-      this.bruh(this.state.teams[this.state.idOfNextUserRowHighlighted]);
       return true;
     }
 
@@ -479,15 +478,18 @@ class Scoreboard extends Component {
     });
   }
 
-  next() {
+  async sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+  }
+
+  async next() {
     console.log("next");
     if (this.state.showingContestantImage) {
       const img = document.getElementById("contestantImg");
       img.classList.toggle("disShow");
       this.state.showingContestantImage = false;
       if (this.state.playing) {
-        clearInterval(this.state.interval);
-        this.state.interval = setInterval(() => this.next(), 1000);
+        setTimeout(() => this.next(), 1000);
         console.log("short");
       }
       return;
@@ -496,12 +498,16 @@ class Scoreboard extends Component {
       let idOfNextUserRowHighlighted = this.state.idOfNextUserRowHighlighted;
       if (this.state.standingHasChangedInLastOperation === false) {
         idOfNextUserRowHighlighted = Math.max(idOfNextUserRowHighlighted - 1, -1);
-        console.log(this.state.idOfNextUserRowHighlighted);
-        this.bruh(this.state.teams[this.state.idOfNextUserRowHighlighted]);
+        console.log("2", this.state.idOfNextUserRowHighlighted);
+        await this.bruh(this.state.teams[this.state.idOfNextUserRowHighlighted]);
         if (this.state.playing) {
-          clearInterval(this.state.interval);
-          this.state.interval = setInterval(() => this.next(), 3000);
+          setTimeout(() => this.next(), 3000);
           console.log("bruh");
+        }
+      }
+      else {
+        if (this.state.playing) {
+          setTimeout(() => this.next(), 1000);
         }
       }
       this.setState({
@@ -510,7 +516,7 @@ class Scoreboard extends Component {
         idOfNextUserRowHighlighted: idOfNextUserRowHighlighted,
       });
     } else {
-      const bruhed = this.findNextSubmissionToReveal();
+      const bruhed = await this.findNextSubmissionToReveal();
       let isPressedKeyOn = 1 - this.state.isPressedKeyOn;
       this.setState({
         isPressedKeyOn: isPressedKeyOn,
@@ -518,12 +524,11 @@ class Scoreboard extends Component {
       });
       this.scrollToElementSelected();
       if (this.state.playing) {
-        clearInterval(this.state.interval);
         console.log(bruhed);
         if (bruhed) {
-          this.state.interval = setInterval(() => this.next(), 3000);
+          setTimeout(() => this.next(), 3000);
         } else {
-          this.state.interval = setInterval(() => this.next(), 500);
+          setTimeout(() => this.next(), 500);
         }
       }
     }
@@ -557,7 +562,7 @@ class Scoreboard extends Component {
       case 80: // (P)lay/Pause Automatic Reveal
         let playing = !this.state.playing;
         if (playing) {
-          this.state.interval = setInterval(() => this.next(), 1000);
+          setTimeout(() => this.next(), 1000);
         }
         console.log("xd", playing);
         this.setState({ playing: playing });
@@ -607,12 +612,15 @@ class Scoreboard extends Component {
     );
   }
 
-  bruh(user) {
+  async bruh(user) {
+    if (this.state.playing) {
+      await this.sleep(500);
+    }
     const img = document.getElementById("contestantImg");
     img.firstElementChild.src = "/src/assets/university_logos/" + user.id + ".jpg";
     img.firstElementChild.nextElementSibling.textContent = user.position + ". " + user.name;
-      img.classList.toggle("disShow");
-      console.log(user.id);
+    img.classList.toggle("disShow");
+    console.log(user.id);
     this.state.showingContestantImage = true;
   }
 }
