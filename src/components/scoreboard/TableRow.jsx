@@ -229,6 +229,7 @@ class TableRow extends Component {
   }
 
   render() {
+    let resultScreen = this.props.resultScreen;
     let problems = this.props.problems;
 
     let sizeProblem = 84.0 / this.props.numberOfProblems;
@@ -272,31 +273,52 @@ class TableRow extends Component {
       classNameForEachRow = "scoreboardTableBlackRow";
     }
 
-    return (
-      <div className={"tableRow " + classNameForEachRow} id={this.props.team.id}>
-        {/*Rank*/}
-        <span className="tableRow-Rank">{this.props.team.position}</span>
-        {/*Photo*/}
-        <img className="tableRow-Picture" src={this.getImageForTeam(this.props.team.id)} alt="" />
-        {/*Name+Problems*/}
-        <div className="tableRow-TeamData">
-          {/*ContestantName*/}
-          <span className="tableRox-ContestantName">{this.props.team.name}</span>
-          {/*ContestantSubtext*/}
-          <span className="tableRox-ContestantSubtext">{this.props.team.subtext}</span>
-          {/*Problem Boxes*/}
-          <div className="tableRox-Problems">
-            {problemColumns.map(problemData => {
-              return <ProblemBox {...problemData} />;
-            })}
+    if (resultScreen !== true) {
+      return (
+        <div className={"tableRow " + classNameForEachRow} id={this.props.team.id}>
+          {/*Rank*/}
+          <span className="tableRow-Rank">{this.props.team.position}</span>
+          {/*Photo*/}
+          <img className="tableRow-Picture" src={this.getImageForTeam(this.props.team.id)} alt="" />
+          {/*Name+Problems*/}
+          <div className="tableRow-TeamData">
+            {/*ContestantName*/}
+            <span className="tableRox-ContestantName">{this.props.team.name}</span>
+            {/*ContestantSubtext*/}
+            <span className="tableRox-ContestantSubtext">{this.props.team.subtext}</span>
+            {/*Problem Boxes*/}
+            <div className="tableRox-Problems">
+              {problemColumns.map(problemData => {
+                return <ProblemBox {...problemData} />;
+              })}
+            </div>
           </div>
+          {/*ProblemsSolved*/}
+          <span className="tableRow-ResolvedProblems">{this.props.team.solved}</span>
+          {/*Penalty*/}
+          <span className="tableRow-Penalty">{this.timeSubmittedToNiceTime(this.props.team.penalty)}</span>
         </div>
-        {/*ProblemsSolved*/}
-        <span className="tableRow-ResolvedProblems">{this.props.team.solved}</span>
-        {/*Penalty*/}
-        <span className="tableRow-Penalty">{this.timeSubmittedToNiceTime(this.props.team.penalty)}</span>
-      </div>
-    );
+      );
+    } else {
+      classNameForEachRow = "scoreboardTableBlackBlackRow";
+      return (
+        <div className={"tableRow " + classNameForEachRow} id={this.props.team.id}>
+          {/*Name+Problems*/}
+          <div className="tableRow-TeamData">
+            {/*Problem Boxes*/}
+            <div className="tableRox-Problems">
+              {problemColumns.map(problemData => {
+                return <ProblemBox {...problemData} />;
+              })}
+            </div>
+          </div>
+          {/*ProblemsSolved*/}
+          <span className="tableRow-ResolvedProblems">{this.props.team.solved}</span>
+          {/*Penalty*/}
+          <span className="tableRow-Penalty">{this.timeSubmittedToNiceTime(this.props.team.penalty)}</span>
+        </div>
+      );
+    }
   }
 }
 

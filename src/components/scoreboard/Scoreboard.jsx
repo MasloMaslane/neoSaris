@@ -259,6 +259,7 @@ class Scoreboard extends Component {
       showingContestantImage: false,
       playing: false,
       lastSubmission: null,
+      resultTeam: null,
     };
   }
 
@@ -621,6 +622,7 @@ class Scoreboard extends Component {
           <img src=""></img>
           <h1>...</h1>
           <h4 style={{marginTop: "15px"}}>...</h4>
+          <div id="resultRow">{this.getResultRow()}</div>
         </div>
         <Header title={this.props.submissionsData.contestMetadata.name} />
         <div className="score-FlipMove" id="score-FlipMove">
@@ -632,14 +634,36 @@ class Scoreboard extends Component {
     );
   }
 
+  getResultRow() {
+    if (this.state.resultTeam === null) {
+      return null;
+    }
+    let classNameForThisRow = "";
+    return <TableRow
+      key={this.state.resultTeam.id}
+      view={this.state.view}
+      index={1}
+      team={this.state.resultTeam}
+      numberOfProblems={this.state.numberOfProblems}
+      problems={this.props.submissionsData.problems}
+      submissionWhenFrozen={this.state.submissionWhenFrozen}
+      currentFrozenSubmission={this.state.savedCurrentFrozenSubmission}
+      savedCurrentFrozenSubmission={this.state.currentFrozenSubmission}
+      classNameForThisRow={classNameForThisRow}
+      resultScreen={true}
+    />;
+  }
+
   async bruh(user) {
     if (this.state.playing) {
       await this.sleep(500);
     }
+    this.setState({ resultTeam: user });
     const img = document.getElementById("contestantImg");
     img.firstElementChild.src = "/src/assets/university_logos/" + user.id + ".jpg";
     img.firstElementChild.nextElementSibling.textContent = user.position + ". " + user.name;
     img.firstElementChild.nextElementSibling.nextElementSibling.textContent = user.subtext;
+
     img.classList.toggle("disShow");
     console.log(user.id);
     this.state.showingContestantImage = true;

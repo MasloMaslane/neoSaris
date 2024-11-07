@@ -24,6 +24,10 @@
   background-color: #0e0e0f;
 }
 
+.scoreboardTableBlackBlackRow {
+  background-color: black;
+}
+
 .scoreboardTableSelectedRow {
   background-color: #2873ed;
 }
@@ -50,6 +54,11 @@
 #contestantImg > img {
   height: 80vh;
   /*! padding-bottom: 10vh; */
+}
+
+#resultRow {
+  width: 90%;
+  margin-bottom: 40px;
 }
 
 .disShow {
