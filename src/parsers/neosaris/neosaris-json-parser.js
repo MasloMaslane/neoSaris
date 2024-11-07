@@ -17,6 +17,7 @@ const Data = z.object({
     z.object({
       id: z.number(),
       name: z.string(),
+      subtext: z.string(),
       school: z.string().optional(),
       iconName: z.string().optional(),
     })

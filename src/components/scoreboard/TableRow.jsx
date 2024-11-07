@@ -22,7 +22,7 @@ import i10289 from "../../assets/university_logos/10289.jpg";
 import i29035 from "../../assets/university_logos/29035.jpg";
 import i31485 from "../../assets/university_logos/31485.jpg";
 import i436 from "../../assets/university_logos/436.jpg";
-import i12601 from "../../assets/university_logos/12601.jpg";
+// import i12601 from "../../assets/university_logos/12601.jpg";
 
 let images = {
 i7736,
@@ -44,7 +44,7 @@ i10289,
 i29035,
 i31485,
 i436,
-i12601,
+// i12601,
 };
 
 class TableRow extends Component {
@@ -282,6 +282,8 @@ class TableRow extends Component {
         <div className="tableRow-TeamData">
           {/*ContestantName*/}
           <span className="tableRox-ContestantName">{this.props.team.name}</span>
+          {/*ContestantSubtext*/}
+          <span className="tableRox-ContestantSubtext">{this.props.team.subtext}</span>
           {/*Problem Boxes*/}
           <div className="tableRox-Problems">
             {problemColumns.map(problemData => {

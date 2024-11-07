@@ -74,6 +74,15 @@
   font-size: min(3vw, 26px);
 }
 
+.tableRox-ContestantSubtext {
+  color: lightgray;
+  text-align: left;
+  font-family: Helvetica;
+  margin-bottom: 0.5rem;
+  margin-left: 0.5rem;
+  font-size: min(2vw, 23px);
+}
+
 .tableRox-Problems {
   display: flex;
   flex-direction: row;

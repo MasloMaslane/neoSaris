@@ -213,6 +213,7 @@ class Scoreboard extends Component {
       result.position = 0;
       result.name = contestant.name;
       result.id = contestant.id;
+      result.subtext = contestant.subtext;
       result.penalty = 0;
       result.solved = 0;
       result.isProblemSolved = isProblemSolved;
@@ -257,6 +258,7 @@ class Scoreboard extends Component {
       lastPositionInStanding: {},
       showingContestantImage: false,
       playing: false,
+      lastSubmission: null,
     };
   }
 
@@ -429,6 +431,7 @@ class Scoreboard extends Component {
     );
 
     if (submissionToRevealId !== -1) {
+      console.log("xd3");
       this.setState({
         currentFrozenSubmission: submissionWhenFrozen[submissionToRevealId],
         savedCurrentFrozenSubmission: submissionWhenFrozen[submissionToRevealId],
@@ -439,6 +442,7 @@ class Scoreboard extends Component {
       this.setState({ hasUserFinishedSubmissions: true });
     }
 
+    console.log("xd5");
     return false;
   }
 
@@ -494,7 +498,9 @@ class Scoreboard extends Component {
       }
       return;
     }
+
     if (this.state.isPressedKeyOn === 0 && this.state.contestantNameToSelect !== null) {
+      console.log("1");
       let idOfNextUserRowHighlighted = this.state.idOfNextUserRowHighlighted;
       if (this.state.standingHasChangedInLastOperation === false) {
         idOfNextUserRowHighlighted = Math.max(idOfNextUserRowHighlighted - 1, -1);
@@ -516,7 +522,9 @@ class Scoreboard extends Component {
         idOfNextUserRowHighlighted: idOfNextUserRowHighlighted,
       });
     } else {
+      console.log("2adsjhkajsndjkasnd");
       const bruhed = await this.findNextSubmissionToReveal();
+      console.log("bruhed", bruhed);
       let isPressedKeyOn = 1 - this.state.isPressedKeyOn;
       this.setState({
         isPressedKeyOn: isPressedKeyOn,
@@ -539,11 +547,22 @@ class Scoreboard extends Component {
       case 34:
       case 78: //(N)ext Submission
         this.next();
+
         break;
 
       case 70: //(F)ast Submission
-        //TODO: Implement Fast Submission, Reveal all pending solutions until AC or final WA
-        console.log("(F)ast Submission, not implemented yet");
+        let id = this.nextSubmission(this.state.idOfNextUserRowHighlighted, this.state.submissionWhenFrozen, this.state.teams);
+        let problemId = this.state.submissions[id].problemIndex;
+        while (true) {
+          let id = this.nextSubmission(this.state.idOfNextUserRowHighlighted, this.state.submissionWhenFrozen, this.state.teams);
+          if (problemId !== this.state.submissions[id].problemIndex) {
+            break;
+          }
+          this.next();
+          if (this.state.hasUserFinishedSubmissions === true) {
+            break;
+          }
+        }
         break;
 
       case 84: //(T)op 10 Standing
@@ -601,6 +620,7 @@ class Scoreboard extends Component {
         <div id="contestantImg">
           <img src=""></img>
           <h1>...</h1>
+          <h4 style={{marginTop: "15px"}}>...</h4>
         </div>
         <Header title={this.props.submissionsData.contestMetadata.name} />
         <div className="score-FlipMove" id="score-FlipMove">
@@ -619,6 +639,7 @@ class Scoreboard extends Component {
     const img = document.getElementById("contestantImg");
     img.firstElementChild.src = "/src/assets/university_logos/" + user.id + ".jpg";
     img.firstElementChild.nextElementSibling.textContent = user.position + ". " + user.name;
+    img.firstElementChild.nextElementSibling.nextElementSibling.textContent = user.subtext;
     img.classList.toggle("disShow");
     console.log(user.id);
     this.state.showingContestantImage = true;
