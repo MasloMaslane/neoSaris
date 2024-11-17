@@ -412,7 +412,6 @@ class Scoreboard extends Component {
     }
 
     if (this.state.hasUserFinishedSubmissions === true) {
-      console.log("1", this.state.idOfNextUserRowHighlighted);
       await this.bruh(this.state.teams[this.state.idOfNextUserRowHighlighted]);
       let idOfNextUserRowHighlighted = this.state.idOfNextUserRowHighlighted - 1;
       this.setState({
@@ -432,7 +431,6 @@ class Scoreboard extends Component {
     );
 
     if (submissionToRevealId !== -1) {
-      console.log("xd3");
       this.setState({
         currentFrozenSubmission: submissionWhenFrozen[submissionToRevealId],
         savedCurrentFrozenSubmission: submissionWhenFrozen[submissionToRevealId],
@@ -442,8 +440,6 @@ class Scoreboard extends Component {
     } else if (this.state.idOfNextUserRowHighlighted >= 0) {
       this.setState({ hasUserFinishedSubmissions: true });
     }
-
-    console.log("xd5");
     return false;
   }
 
@@ -490,26 +486,24 @@ class Scoreboard extends Component {
   async next() {
     console.log("next");
     if (this.state.showingContestantImage) {
+      console.log("hiding contestant image");
       const img = document.getElementById("contestantImg");
       img.classList.toggle("disShow");
       this.state.showingContestantImage = false;
       if (this.state.playing) {
         setTimeout(() => this.next(), 1000);
-        console.log("short");
       }
       return;
     }
 
     if (this.state.isPressedKeyOn === 0 && this.state.contestantNameToSelect !== null) {
-      console.log("1");
+      console.log("?");
       let idOfNextUserRowHighlighted = this.state.idOfNextUserRowHighlighted;
       if (this.state.standingHasChangedInLastOperation === false) {
         idOfNextUserRowHighlighted = Math.max(idOfNextUserRowHighlighted - 1, -1);
-        console.log("2", this.state.idOfNextUserRowHighlighted);
         await this.bruh(this.state.teams[this.state.idOfNextUserRowHighlighted]);
         if (this.state.playing) {
           setTimeout(() => this.next(), 3000);
-          console.log("bruh");
         }
       }
       else {
@@ -523,9 +517,7 @@ class Scoreboard extends Component {
         idOfNextUserRowHighlighted: idOfNextUserRowHighlighted,
       });
     } else {
-      console.log("2adsjhkajsndjkasnd");
       const bruhed = await this.findNextSubmissionToReveal();
-      console.log("bruhed", bruhed);
       let isPressedKeyOn = 1 - this.state.isPressedKeyOn;
       this.setState({
         isPressedKeyOn: isPressedKeyOn,
@@ -533,7 +525,6 @@ class Scoreboard extends Component {
       });
       this.scrollToElementSelected();
       if (this.state.playing) {
-        console.log(bruhed);
         if (bruhed) {
           setTimeout(() => this.next(), 3000);
         } else {
@@ -543,25 +534,25 @@ class Scoreboard extends Component {
     }
   }
 
-  keyDownHandler(e) {
+  async keyDownHandler(e) {
     switch (e.keyCode) {
       case 34:
       case 78: //(N)ext Submission
-        this.next();
+        await this.next();
 
         break;
 
       case 70: //(F)ast Submission
-        let id = this.nextSubmission(this.state.idOfNextUserRowHighlighted, this.state.submissionWhenFrozen, this.state.teams);
-        let problemId = this.state.submissions[id].problemIndex;
+        console.log("F");
         while (true) {
-          let id = this.nextSubmission(this.state.idOfNextUserRowHighlighted, this.state.submissionWhenFrozen, this.state.teams);
-          if (problemId !== this.state.submissions[id].problemIndex) {
+          console.log("WHILE");
+          if (this.state.isPressedKeyOn === 0 && this.state.contestantNameToSelect !== null) {
+            console.log("BREAKING");
             break;
-          }
-          this.next();
-          if (this.state.hasUserFinishedSubmissions === true) {
-            break;
+          } else {
+            console.log("YAWNNN");
+            this.next();
+            await this.sleep(100);
           }
         }
         break;
@@ -667,6 +658,7 @@ class Scoreboard extends Component {
     img.classList.toggle("disShow");
     console.log(user.id);
     this.state.showingContestantImage = true;
+    console.log("showing contestant image");
   }
 }
 
